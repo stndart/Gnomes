@@ -19,8 +19,8 @@ class DisplayManager:
                 name = self.gm.field[i][j].name
                 if name not in sprites:
                     sprites[name] = Image.open('resources/cells/%s.png' % name).convert(mode='RGBA')
-                x = (i - 1/2 - self.gm.player.coords[0]) * w + 500 / 2
-                y = (j - 1/2 - self.gm.player.coords[1]) * h + 500 / 2
+                x = (j - 1/2 - self.gm.player.coords[0]) * w + 500 / 2
+                y = (i - 1/2 - self.gm.player.coords[1]) * h + 500 / 2
                 sprite = sprites[name].resize((w, h), resample=Image.BICUBIC)
                 im.paste(sprite, (int(x), int(y)), mask=sprite)
             
@@ -34,5 +34,34 @@ class DisplayManager:
 class GameManager:
     def __init__(self, cx, cy, px, py):
         self.field = [[game.Cell('grass') for i in range(cx)] for j in range(cy)]
-        self.field[1][1] = game.Cell('tree')
-        self.player = game.Player('P1', (px, py), 10)
+        self.player = game.Player('P1', [px, py], 10)
+    
+    def load_map(self, fn):
+        f = open(fn, 'r')
+        lines = f.readlines()
+        f.close()
+        self.field = [[game.Cell('grass') for i in range(len(lines[0].rstrip()))] for j in range(len(lines))]
+        for i in range(len(lines)):
+            for j in range(len(lines[0].rstrip())):
+                if lines[i][j] == 'g':
+                    self.field[i][j] = game.Cell('grass')
+                if lines[i][j] == 't':
+                    self.field[i][j] = game.Cell('tree')
+
+class EventManager:
+    def __init__(self, gm):
+        self.gm = gm
+    
+    def arrowpressed(self, arrow):
+        if arrow == 'up':
+            if self.gm.player.coords[1] > 0:
+                self.gm.player.coords[1] -= 1
+        if arrow == 'down':
+            if self.gm.player.coords[1] < len(self.gm.field) - 1:
+                self.gm.player.coords[1] += 1
+        if arrow == 'right':
+            if self.gm.player.coords[0] < len(self.gm.field[0]) - 1:
+                self.gm.player.coords[0] += 1
+        if arrow == 'left':
+            if self.gm.player.coords[0] > 0:
+                self.gm.player.coords[0] -= 1
