@@ -2,7 +2,6 @@ from tkinter import *
 from time import time
 from managers import DisplayManager, GameManager, EventManager
 
-
 root = Tk()
 root.geometry('500x500')
 GM = GameManager(10, 10, 5, 5)
@@ -33,6 +32,8 @@ def event(e):
         EM.arrowpressed('left')
     elif e.keysym_num == 65363:  # Right
         EM.arrowpressed('right')
+    elif e.keysym_num == 32:  # Space (next turn)
+        EM.nextturn()
     else:
         #print(e.keysym_num, flush=True)
         pass
