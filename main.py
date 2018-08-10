@@ -24,18 +24,18 @@ def display():
     root.after(max(0, int((spf - timespent) * 1000)), display)
 
 def event(e):
-    if e.keysym_num == 65362:  # Up
+    if e.keysym_num in [65362, 119]:  # Up
         EM.arrowpressed('up')
-    elif e.keysym_num == 65364:  # Down
+    elif e.keysym_num in [65364, 115]:  # Down
         EM.arrowpressed('down')
-    elif e.keysym_num == 65361:  # Left
+    elif e.keysym_num in [65361, 97]:  # Left
         EM.arrowpressed('left')
-    elif e.keysym_num == 65363:  # Right
+    elif e.keysym_num in [65363, 100]:  # Right
         EM.arrowpressed('right')
     elif e.keysym_num == 32:  # Space (next turn)
         EM.nextturn()
     else:
-        #print(e.keysym_num, flush=True)
+        print(e.keysym_num, flush=True)
         pass
 
 

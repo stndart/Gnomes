@@ -9,6 +9,8 @@ class Cell:
 class Player:
     def __init__(self, nick, coords, speed):
         self.nick = nick
-        self.coords = coords
+        self.coords = coords.copy()
+        self.old_coords = coords.copy()
+        self.movement_progress = 0
         self.speed = speed
         self.cellsleft = speed

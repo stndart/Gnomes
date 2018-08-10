@@ -13,7 +13,21 @@ class DisplayManager:
     def getimage(self):
         im = Image.new('RGBA', (self.wx, self.wy), color=(255, 0, 0))
         sprites = dict()
-    
+        
+        ANIMLEN = 100
+        ANIMSTEP = 10
+        real_pos = self.gm.player.coords.copy()
+        if self.gm.player.old_coords != self.gm.player.coords:
+            self.gm.player.movement_progress += ANIMSTEP
+            if self.gm.player.movement_progress >= ANIMLEN:
+                self.gm.player.old_coords = self.gm.player.coords.copy()
+                self.gm.player.movement_progress = 0
+            else:
+                dx = self.gm.player.coords[0] - self.gm.player.old_coords[0]
+                dy = self.gm.player.coords[1] - self.gm.player.old_coords[1]
+                real_pos = [self.gm.player.old_coords[0] + dx * self.gm.player.movement_progress / ANIMLEN,
+                            self.gm.player.old_coords[1] + dy * self.gm.player.movement_progress / ANIMLEN]
+        
         w = 50
         h = 50        
         for i in range(len(self.gm.field)):
@@ -21,8 +35,8 @@ class DisplayManager:
                 name = self.gm.field[i][j].name
                 if name not in sprites:
                     sprites[name] = Image.open('resources/cells/%s.png' % name).convert(mode='RGBA')
-                x = (j - 1/2 - self.gm.player.coords[0]) * w + 500 / 2
-                y = (i - 1/2 - self.gm.player.coords[1]) * h + 500 / 2
+                x = (j - 1/2 - real_pos[0]) * w + 500 / 2
+                y = (i - 1/2 - real_pos[1]) * h + 500 / 2
                 sprite = sprites[name].resize((w, h), resample=Image.BICUBIC)
                 im.paste(sprite, (int(x), int(y)), mask=sprite)
             
@@ -82,7 +96,7 @@ class EventManager:
                 self.gm.player.coords[0] -= 1
                 is_moved = True
             
-        coords = self.gm.player.coords                
+        coords = self.gm.player.coords
         if is_moved:
             self.gm.player.cellsleft -= self.gm.field[coords[1]][coords[0]].walken
     
