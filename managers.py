@@ -11,11 +11,14 @@ class DisplayManager:
         self.gm = gm
     
     def getimage(self):
+        if self.gm.em is not None:
+            self.gm.em.proceed_events()
+        
         im = Image.new('RGBA', (self.wx, self.wy), color=(255, 0, 0))
         sprites = dict()
         
         ANIMLEN = 100
-        ANIMSTEP = 10
+        ANIMSTEP = 25
         real_pos = self.gm.player.coords.copy()
         if self.gm.player.old_coords != self.gm.player.coords:
             self.gm.player.movement_progress += ANIMSTEP
@@ -55,7 +58,8 @@ class DisplayManager:
 class GameManager:
     def __init__(self, cx, cy, px, py):
         self.field = [[game.Cell('grass') for i in range(cx)] for j in range(cy)]
-        self.player = game.Player('P1', [px, py], 3)
+        self.player = game.Player('P1', [px, py], 10)
+        self.em = None
     
     def load_map(self, fn):
         f = open(fn, 'r')
@@ -68,12 +72,27 @@ class GameManager:
                     self.field[i][j] = game.Cell('grass')
                 if lines[i][j] == 't':
                     self.field[i][j] = game.Cell('tree')
+                if lines[i][j] == 'b':
+                    self.field[i][j] = game.Cell('bush')
+                if lines[i][j] == 'l':
+                    self.field[i][j] = game.Cell('log')
 
 class EventManager:
     def __init__(self, gm):
         self.gm = gm
+        self.queue = list()
+        self.gm.em = self
+    
+    def proceed_events(self):
+        if len(self.queue):
+            self.arrowpressed(self.queue[0])
+            self.queue.pop(0)
     
     def arrowpressed(self, arrow):
+        if self.gm.player.movement_progress != 0:
+            self.queue.append(arrow)
+            return
+        
         is_moved = False
         
         if self.gm.player.cellsleft <= 0:

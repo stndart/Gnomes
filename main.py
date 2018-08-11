@@ -1,11 +1,18 @@
 from tkinter import *
 from time import time
 from managers import DisplayManager, GameManager, EventManager
+from random import choice
+
 
 root = Tk()
 root.geometry('500x500')
 GM = GameManager(10, 10, 5, 5)
-GM.load_map('map.txt')
+maps = ['maps/map.txt',
+        'maps/map1.txt',
+        'maps/map2.txt',
+        'maps/map3.txt',
+        'maps/map4.txt']
+GM.load_map(choice(maps))
 EM = EventManager(GM)
 DM = DisplayManager(500, 500, GM)
 canv = Canvas()
@@ -35,7 +42,7 @@ def event(e):
     elif e.keysym_num == 32:  # Space (next turn)
         EM.nextturn()
     else:
-        print(e.keysym_num, flush=True)
+        #print(e.keysym_num, flush=True)
         pass
 
 
