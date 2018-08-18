@@ -1,0 +1,32 @@
+general:
+name
+texture
+
+actions:
+'give' smth N S(strafe for each repeat) # things
+'gain' smth N S # health, mana, exp, etc.
+'break' thing health S # axe has N uses
+'damage' direction health S # can be a cell (tree)
+'loot' # give player all loot from this cell
+# direction: 1-9
+'ach' ach # give achievement
+(example: 'give', 'sticks', 3, -1 = give 3 sticks (-1 for each repeat)
+
+repeats: = 1..N
+performed: 0 (variable to compute strafe)
+
+conditions:
+'have' smth N # things
+'uhave' smth N # doesn't have
+'gained' smth N # helth, mana, exp, etc.
+'ugained' smth N
+'achievement' ach # if there was achievement performed
+'uachievement' ach
+
+Example: cutting down tree
+actions:
+'break' 'wooden_axe' -10
+'damage' 5 -20
+repeats = 100
+conditions:
+'have' 'wooden_axe' 1

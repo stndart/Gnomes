@@ -1,0 +1,3 @@
+rocks + sticks * 2 = hammer
+rocks * 3 = chipper
+chipper + sticks * 2 = wooden_axe * 30
