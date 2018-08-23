@@ -12,9 +12,13 @@ debug.named-entry-points = (1,
                         '')),
          'loc': loc('main.py')})})
 proj.directory-list = [{'dirloc': loc('.'),
-                        'excludes': (),
-                        'filter': u'*',
-                        'include_hidden': False,
+                        'excludes': [u'Gnomes.wpr',
+                                     u'.gitattributes',
+                                     u'.git',
+                                     u'Gnomes.wpu',
+                                     u'__pycache__'],
+                        'filter': '*',
+                        'include_hidden': True,
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'

@@ -54,7 +54,10 @@ def event(e):
         pass
 
 def mouseclick(button, e):
-    pass
+    if button == 1:
+        EM.mouseclick(e.x, e.y)
+    elif button == 2:
+        EM.mouseclickright(e.x, e.y)
 
 root.bind('<KeyPress>', event)
 root.bind('<Button-1>', lambda e: mouseclick(1, e))

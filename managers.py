@@ -3,6 +3,7 @@ from PIL import ImageTk
 from PIL import ImageFont
 from PIL import ImageDraw
 import game
+from numpy import log
 
 class DisplayManager:
     ANIMLEN = 100
@@ -295,3 +296,21 @@ class EventManager:
         elif self.gm.inventory_opened:
             if 0 < number <= len(self.gm.player.backpack.available_recipes):
                 self.gm.craft_recipe(number - 1)
+    
+    def mouseclick(self, x, y):
+        if self.gm.actions is not None:
+            rx = x - 500 // 2
+            ry = y - 500 // 2
+            vector = rx - 1j * ry
+            arg = (log(vector) / log(1j)).real
+            
+            def sector(arg, n=6):
+                z = ((-arg + 4) % 4) * n / 4 + 0.5
+                return int(z) % n
+            
+            if 40 <= abs(vector) <= 100:
+                self.numberpressed(sector(arg) + 1)
+            
+    
+    def mouseclickright(self, x, y):
+        pass
